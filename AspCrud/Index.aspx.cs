@@ -1,6 +1,9 @@
-﻿using MySql.Data.MySqlClient;
+﻿using AspCrudBE;
+using AspCrudBL;
+using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data;
 using System.Linq;
 using System.Web;
@@ -11,11 +14,16 @@ namespace AspCrud
 {
     public partial class Index : System.Web.UI.Page
     {
+
+        ProductBL prodBL;
         string connectionString = @"Server=10.25.1.86; UserID=root;Password=valerie5250;Database=AspCrudDb";
+
+
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
             {
+                prodBL = new ProductBL();
                 Clear();
                 GridFill(); 
             }
@@ -63,6 +71,8 @@ namespace AspCrud
 
         void GridFill()
         {
+            List<ProductBE> lstProd;
+            /*
             using (MySqlConnection sqlConn = new MySqlConnection(connectionString))
             {
                 sqlConn.Open();
@@ -72,9 +82,18 @@ namespace AspCrud
                 sqlDa.Fill(dtTbl);
                 gvProduct.DataSource = dtTbl;
                 gvProduct.DataBind();
+            gvProduct.DataSource = dtTbl;
+            gvProduct.DataBind();
 
 
             }
+            */
+            lstProd = this.prodBL.ProductViewAll();
+            var list = new BindingList<ProductBE>(lstProd);
+            gvProduct.DataSource = list;
+            gvProduct.DataBind();
+
+
         }
 
         protected void lnkSelect_OnClick(object sender, EventArgs e)
